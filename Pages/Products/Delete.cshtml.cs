@@ -5,7 +5,7 @@ using SupermarketWEB.Data;
 using SupermarketWEB.Models;
 using System.Threading.Tasks;
 
-namespace SupermarketWEB.Pages.Products
+namespace SupermarketWEB.Pages.Categories
 {
     public class DeleteModel : PageModel
     {
@@ -17,41 +17,23 @@ namespace SupermarketWEB.Pages.Products
         }
 
         [BindProperty]
-        public Product Product { get; set; } = default;
+        public Category Category { get; set; } = default;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
 
-            if (product == null)
+            if (category != null)
             {
-                return NotFound();
-            }
-            Product = product;
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products.FindAsync(id);
-
-            if (product != null)
-            {
-                Product = product;
-                _context.Products.Remove(product);
+                Category = category;
+                _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToPage("./Index");
         }
     }
